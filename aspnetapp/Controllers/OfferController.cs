@@ -67,7 +67,7 @@ namespace aspnetapp.Controllers
 
                         using MemoryStream ms = new();
 
-                        await image.SaveAsync(ms, format);
+                        await image.SaveAsJpegAsync(ms);
 
                         return File(ms.ToArray(), "image/jpeg");
                     }
