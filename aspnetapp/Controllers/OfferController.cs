@@ -43,7 +43,7 @@ namespace aspnetapp.Controllers
         [HttpPost]
         public async Task<ActionResult> PostOffer(OfferRequest data)
         {
-            if (!string.IsNullOrWhiteSpace(data.name))
+            if (!string.IsNullOrWhiteSpace(data.name) && !string.IsNullOrWhiteSpace(data.date))
             {
                 using (Image image = Image.Load(_webHostEnvironment.WebRootPath + @"/images/offer.png", out IImageFormat format))
                 {
