@@ -13,6 +13,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using Microsoft.AspNetCore.Hosting;
 using SixLabors.ImageSharp.Formats;
+using System.Globalization;
 
 public class OfferRequest
 {
@@ -42,27 +43,27 @@ namespace aspnetapp.Controllers
         {
             if (!string.IsNullOrWhiteSpace(data.name))
             {
-                using var client = new HttpClient();
-
-                var response = await client.GetAsync("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F511%2F101611154647%2F111016154647-10-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662372086&t=074e443e71868f151624c2e7b731a2af");
-
-                var bytes = await response.Content.ReadAsByteArrayAsync();
-
-                using (Image image = Image.Load(bytes, out IImageFormat format))
+                using (Image image = Image.Load(_webHostEnvironment.WebRootPath + @"/images/offer.png", out IImageFormat format))
                 {
                     FontCollection collection = new();
-
-                    Console.WriteLine(_webHostEnvironment.WebRootPath + @"/fonts/msyh.ttf");
 
                     collection.Add(_webHostEnvironment.WebRootPath + @"/fonts/msyh.ttf");
 
                     if (collection.TryGet("Microsoft Yahei", out FontFamily family))
                     {
-                        Font font = family.CreateFont(20, FontStyle.Italic);
+                        var font1 = family.CreateFont(72, FontStyle.Regular);
 
-                        string yourText = "鐖变綘鍛�";
+                        FontRectangle size1 = TextMeasurer.Measure(data.name, new TextOptions(font1));
 
-                        image.Mutate(x => x.DrawText(yourText, font, Color.Black, new PointF(10, 10)));
+                        image.Mutate(x => x.DrawText(data.name, font1, Color.Black, new PointF(762 + (470 - size1.Width) / 2, 642)));
+
+                        var font2 = family.CreateFont(32, FontStyle.Regular);
+
+                        var date = getDate();
+
+                        FontRectangle size2 = TextMeasurer.Measure(date, new TextOptions(font2));
+
+                        image.Mutate(x => x.DrawText(date, font2, Color.Black, new PointF(1425 + (278 - size2.Width) / 2, 1089)));
 
                         using MemoryStream ms = new();
 
@@ -78,6 +79,27 @@ namespace aspnetapp.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        private string getDate()
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("zh-CN");
+
+            var year = DateTime.Today.ToString("yyyy");
+
+            var month = DateTime.Today.ToString("MMMM");
+
+            string[] strArr = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
+
+            string result = "";
+
+            for (var i = 0; i < year.Length; i++)
+            {
+                result += strArr[Convert.ToInt32(year[i].ToString())];
+            }
+
+            return result + "年" + month;
+
         }
     }
 }
