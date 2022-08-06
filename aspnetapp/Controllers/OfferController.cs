@@ -52,7 +52,9 @@ namespace aspnetapp.Controllers
                 {
                     FontCollection collection = new();
 
-                    collection.Add(_webHostEnvironment.WebRootPath + @"\fonts\微软雅黑.ttf");
+                    Console.WriteLine(_webHostEnvironment.WebRootPath + @"/fonts/msyh.ttf");
+
+                    collection.Add(_webHostEnvironment.WebRootPath + @"/fonts/msyh.ttf");
 
                     if (collection.TryGet("Microsoft Yahei", out FontFamily family))
                     {
