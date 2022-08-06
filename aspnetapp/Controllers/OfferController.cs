@@ -18,6 +18,8 @@ using System.Globalization;
 public class OfferRequest
 {
     public string name { get; set; }
+
+    public string date { get; set; }
 }
 public class OfferResponse
 {
@@ -59,11 +61,9 @@ namespace aspnetapp.Controllers
 
                         var font2 = family.CreateFont(32, FontStyle.Regular);
 
-                        var date = getDate();
+                        FontRectangle size2 = TextMeasurer.Measure(data.date, new TextOptions(font2));
 
-                        FontRectangle size2 = TextMeasurer.Measure(date, new TextOptions(font2));
-
-                        image.Mutate(x => x.DrawText(date, font2, Color.Black, new PointF(1425 + (278 - size2.Width) / 2, 1089)));
+                        image.Mutate(x => x.DrawText(data.date, font2, Color.Black, new PointF(1425 + (278 - size2.Width) / 2, 1089)));
 
                         using MemoryStream ms = new();
 
@@ -79,27 +79,6 @@ namespace aspnetapp.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        private string getDate()
-        {
-            var year = DateTime.Today.ToString("yyyy");
-
-            var month = DateTime.Today.Month;
-
-            string[] strArr = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
-
-            string[] strArr2 = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二" };
-
-            string result = "";
-
-            for (var i = 0; i < year.Length; i++)
-            {
-                result += strArr[Convert.ToInt32(year[i].ToString())];
-            }
-
-            return result + "年" + strArr2[month - 1] + "月";
-
         }
     }
 }
