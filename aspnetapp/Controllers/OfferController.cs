@@ -83,13 +83,13 @@ namespace aspnetapp.Controllers
 
         private string getDate()
         {
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("zh-CN");
-
             var year = DateTime.Today.ToString("yyyy");
 
-            var month = DateTime.Today.ToString("MMMM");
+            var month = DateTime.Today.Month;
 
-            string[] strArr = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
+            string[] strArr = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
+
+            string[] strArr2 = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二" };
 
             string result = "";
 
@@ -98,7 +98,7 @@ namespace aspnetapp.Controllers
                 result += strArr[Convert.ToInt32(year[i].ToString())];
             }
 
-            return result + "年" + month;
+            return result + "年" + strArr2[month - 1] + "月";
 
         }
     }
